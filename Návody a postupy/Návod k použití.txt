@@ -1,0 +1,50 @@
+KVÍZOVÁ HRA — NÁVOD K POUŽITÍ
+================================
+
+SPUŠTĚNÍ
+Otevři soubor index.html v internetovém prohlížeči. Hra běží přímo v
+prohlížeči a nevyžaduje instalaci.
+
+1. NASTAVENÍ PŘED HROU
+Vpravo nahoře otevři Nastavení. Zde můžeš upravit:
+
+- Jazyk rozhraní: čeština nebo angličtina. Otázky jsou zatím pouze v češtině.
+- Motiv: světlý nebo tmavý.
+- Barvu motivu: fialovou, modrou, zelenou, růžovou nebo oranžovou.
+- Počet otázek v kole: 5, 10 nebo 15.
+- Čas na každou otázku: 10, 15 nebo 20 sekund.
+- Zvukové efekty po odpovědi: zapnout nebo vypnout.
+
+Změny se ukládají automaticky. Tlačítkem „Obnovit výchozí“ vrátíš původní
+nastavení. Tlačítkem „Hotovo“ zavřeš okno nastavení.
+
+2. VÝBĚR OBTÍŽNOSTI A START
+Na úvodní obrazovce zvol lehkou, střední nebo těžkou obtížnost a stiskni
+„Jdeme na to“. Otázky se losují náhodně. V rámci jedné relace se neopakují,
+dokud se nevyčerpá nabídka pro vybranou obtížnost.
+
+3. PRŮBĚH KVÍZU
+U každé otázky vyber jednu ze čtyř odpovědí před vypršením časového limitu.
+Po výběru se zobrazí správná odpověď a počet získaných bodů. Tlačítkem
+„Další otázka“ pokračuješ. Průběh ukazuje pořadí otázky a ukazatel postupu.
+
+Pokud chceš hru ukončit dříve, stiskni „Vzdát kvíz“. Zobrazí se výsledek
+z dosud zodpovězených otázek a tlačítkem „Zpět na úvod“ se vrátíš na začátek.
+
+4. BODOVÁNÍ
+- Správná odpověď: 100 bodů.
+- Rychlá správná odpověď: dalších 100 bodů navíc.
+- Rychlostní bonus získáš při odpovědi do 3 sekund na lehké a střední
+  obtížnosti, nebo do 5 sekund na těžké obtížnosti.
+- Za špatnou odpověď ani za vypršení času se body nepřičítají.
+
+Na výsledkové obrazovce uvidíš celkový počet bodů, počet správných odpovědí
+a procentuální úspěšnost. Po dokončení můžeš hrát znovu nebo změnit obtížnost.
+
+5. ULOŽENÍ NASTAVENÍ
+Nastavení se ukládá do úložiště aktuálního prohlížeče na tomto zařízení.
+Po vymazání dat prohlížeče nebo použití jiného prohlížeče se může vrátit
+na výchozí hodnoty. Otázky ani výsledky se nikam neposílají.
+
+Výchozí nastavení: čeština, tmavý motiv, fialová barva, 10 otázek,
+15 sekund na otázku a vypnuté zvukové efekty.

@@ -1,0 +1,143 @@
+TECHNICKÝ POSTUP KÓDOVÁNÍ KVÍZOVÉ APLIKACE
+==========================================
+
+Tento dokument popisuje, jak je aplikace napsaná: jaké technologie, funkce,
+události a datové struktury používá. Ukázky jsou zkrácené výňatky ze souboru
+script.js, styles.css a index.html; nejsou to celé soubory.
+
+1. TECHNOLOGIE A PROPOJENÍ SOUBORŮ
+Projekt používá HTML pro strukturu stránky, CSS pro vzhled a JavaScript
+pro chování aplikace. Není potřeba server ani externí knihovny.
+
+V index.html jsou externí soubory připojené takto:
+
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+Atribut defer zajistí, že se JavaScript spustí až po načtení HTML.
+
+2. STRUKTURA OTÁZKY A STAV HRY
+V script.js jsou otázky uložené v objektu questionBank. Každá úroveň
+obtížnosti obsahuje pole objektů. Objekt otázky uchovává kategorii, text,
+nabízené odpovědi a index správné odpovědi:
+
+{
+  category: "Věda",
+  question: "Který chemický prvek má značku Fe?",
+  answers: ["Fluor", "Fosfor", "Železo", "Francium"],
+  correct: 2
+}
+
+Index correct začíná od nuly, takže hodnota 2 označuje třetí odpověď.
+Proměnné questionIndex, score, correctAnswers a answeredQuestions drží
+aktuální otázku a průběžný výsledek. Pole questions obsahuje vybranou
+sadu otázek pro rozehrané kolo.
+
+3. FUNKCE PRO NÁHODNÉ MÍCHÁNÍ
+Funkce shuffled(items) nejprve vytvoří kopii pole, aby nepřepsala původní
+banku otázek. Potom používá Fisherův–Yatesův algoritmus: náhodně vybere
+pozici a prohodí ji s právě zpracovávaným prvkem.
+
+Zjednodušený výňatek:
+
+function shuffled(items) {
+  const copy = [...items];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
+Funkce selectQuestions(level) vybere nastavený počet dosud nepoužitých
+otázek pro danou obtížnost. Použité texty si pamatuje objekt usedQuestions,
+který má pro každou obtížnost vlastní JavaScriptovou množinu Set.
+
+4. VYKRESLENÍ OTÁZEK A ČASOVAČ
+startQuiz() vynuluje skóre a spustí kolo. renderQuestion() zobrazí aktuální
+otázku, smaže předchozí odpovědi a vytvoří čtyři tlačítka pomocí
+document.createElement(). Na každé tlačítko připojí událost click,
+která zavolá selectAnswer(index).
+
+Časovač používá setInterval s intervalem 1000 ms, tedy jednou za sekundu.
+Při změně otázky se předchozí interval zastaví pomocí clearInterval().
+Pokud čas dojde, zavolá se selectAnswer(-1); hodnota -1 označuje vypršení
+času bez vybrané odpovědi.
+
+Čas odpovědi se zároveň měří přes performance.now(). To umožňuje spočítat
+přesný čas pro rychlostní bonus, nezávisle na zaokrouhleném číselníku.
+
+5. KONTROLA ODPOVĚDI A BODY
+selectAnswer(selectedIndex) nejprve kontroluje proměnnou answered.
+Tím se zabrání dvojímu započítání odpovědi nebo kliknutí po vypršení času.
+Pak zastaví časovač, vypne tlačítka a porovná zvolený index s question.correct.
+
+Zjednodušený výňatek bodování:
+
+if (selectedIndex === question.correct) {
+  correctAnswers += 1;
+  const speedThreshold = difficulty === "hard" ? 5 : 3;
+  const speedBonus = elapsedSeconds <= speedThreshold;
+  const earned = speedBonus ? 200 : 100;
+  score += earned;
+}
+
+Za správnou odpověď je 100 bodů, případný rychlostní bonus přidá dalších
+100. Špatná odpověď ani vypršení času skóre nezvýší.
+
+6. VÝSLEDKOVÁ OBRAZOVKA A VZDÁNÍ
+showResults() vypočítá procenta pomocí počtu správných odpovědí a počtu
+hodnocených otázek. Při běžném dokončení se hodnotí celé kolo; při vzdání
+jen otázky, na které už uživatel odpověděl. Dělení nulou je ošetřené
+kontrolou, zda počet hodnocených otázek není nula.
+
+Událost click tlačítka „Vzdát kvíz“ volá showResults(true). Parametr true
+označí výsledek jako předčasně ukončený a nabídne návrat na úvodní obrazovku.
+
+7. NASTAVENÍ, PŘEKLADY A LOCALSTORAGE
+DEFAULT_SETTINGS obsahuje výchozí hodnoty. Aktuální nastavení se čte
+z localStorage pomocí localStorage.getItem() a JSON.parse(). Při změně
+se objekt převede na JSON a uloží pomocí localStorage.setItem().
+Čtení i zápis jsou v try/catch, protože úložiště může být v prohlížeči
+zakázané nebo nedostupné.
+
+Funkce applySettings() nastaví data-theme a data-accent na elementu body.
+CSS pak podle těchto atributů změní proměnné barev. Funkce applyLanguage()
+najde HTML prvky označené data-i18n a nahradí jejich text podle slovníku
+translations. Funkce translate(key) vrací překlad podle právě zvoleného jazyka.
+
+8. UŽIVATELSKÉ UDÁLOSTI A ZVUK
+addEventListener("click", ...) reaguje na stisk tlačítek. Událost change
+u selectů a checkboxu načte novou hodnotu, zavolá updateSetting(), znovu
+vykreslí nastavení a uloží ho. Tlačítka pro barvu používají datový atribut
+data-accent.
+
+Volitelný zvuk generuje Web Audio API: funkce playAnswerSound() vytvoří
+AudioContext, oscilátor createOscillator() a řízení hlasitosti
+createGain(). Správná a špatná odpověď mají jiný tón. Zvuk se přehraje
+jen tehdy, když je volba zapnutá.
+
+9. CSS VZHLED A RESPONSIVNÍ ROZLOŽENÍ
+V styles.css jsou barvy definované jako CSS custom properties, například
+--background a --purple. Selektory body[data-theme="light"] a
+body[data-accent="blue"] mění jejich hodnoty bez přepisování celé sady stylů.
+
+Box-sizing border-box usnadňuje výpočty rozměrů. Media query
+@media (max-width: 520px) upravuje rozložení na menších obrazovkách.
+Pravidlo prefers-reduced-motion omezuje animace pro uživatele, kteří
+mají v systému zapnuté omezení pohybu.
+
+10. SPUŠTĚNÍ A OVĚŘENÍ
+Hra se spustí otevřením index.html v prohlížeči. Syntaxe JavaScriptu se
+kontroluje příkazem:
+
+node --check script.js
+
+Funkčnost byla ověřena průchodem hry v prohlížeči: výběr obtížnosti,
+časovač, správné a špatné odpovědi, body, vzdání, výsledky, nastavení,
+obnovení stránky a mobilní šířka.
+
+HLAVNÍ SOUBORY
+index.html — struktura stránky a ovládací prvky
+styles.css  — styly, motivy a rozložení
+script.js   — otázky, funkce a pravidla hry

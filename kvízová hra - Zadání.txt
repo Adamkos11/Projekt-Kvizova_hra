@@ -1,0 +1,8 @@
+🧠 Quiz App
+Obtížnost: 2/5 | HTML, CSS, JavaScript
+Vlastní kvízová aplikace.
+Otázky a odpovědi.
+Časový limit.
+Bodování.
+Výsledková obrazovka.
+Výběr obtížnosti.

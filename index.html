@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11142a">
+  <link rel="stylesheet" href="styles.css">
+  <title>Kvízová hra — Otestuj své znalosti</title>
+  
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><span data-i18n="brand">Kvízová hra</span></div>
+    <div class="topbar-actions">
+      <div class="top-note" data-i18n="topNote">MALÁ VÝZVA PRO TVOU HLAVU</div>
+      <button class="settings-button" id="open-settings" type="button" aria-haspopup="dialog" data-i18n-aria="settingsTitle"><span aria-hidden="true">⚙</span><span data-i18n="settingsButton">Nastavení</span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" id="intro">
+      <p class="eyebrow" data-i18n="introEyebrow">Jsi připraven/a?</p>
+      <h1 data-i18n="introTitle">Kolik toho víš?</h1>
+      <p class="subtitle" data-i18n="introSubtitle">Otestuj své znalosti v rychlém kvízu. Vyber si obtížnost a ukaž, co v tobě je.</p>
+    </section>
+
+    <section class="card" id="setup" aria-labelledby="difficulty-label">
+      <p class="section-label" id="difficulty-label" data-i18n="difficultyLabel">Vyber si obtížnost</p>
+      <div class="difficulty-grid" role="group" aria-label="Obtížnost kvízu" data-i18n-aria="difficultyGroup">
+        <button class="difficulty-option" type="button" data-difficulty="easy" aria-pressed="false">
+          <span class="difficulty-icon" aria-hidden="true">🌱</span>
+          <span class="difficulty-name" data-i18n="easy">Lehká</span>
+          <span class="difficulty-detail" data-i18n="easyDetail">Na rozehřátí</span>
+        </button>
+        <button class="difficulty-option" type="button" data-difficulty="medium" aria-pressed="true">
+          <span class="difficulty-icon" aria-hidden="true">⚡</span>
+          <span class="difficulty-name" data-i18n="medium">Střední</span>
+          <span class="difficulty-detail" data-i18n="mediumDetail">Tak akorát</span>
+        </button>
+        <button class="difficulty-option" type="button" data-difficulty="hard" aria-pressed="false">
+          <span class="difficulty-icon" aria-hidden="true">🔥</span>
+          <span class="difficulty-name" data-i18n="hard">Těžká</span>
+          <span class="difficulty-detail" data-i18n="hardDetail">Pro znalce</span>
+        </button>
+      </div>
+      <div class="quiz-facts" aria-label="Informace o kvízu" data-i18n-aria="quizFacts">
+        <span aria-hidden="true">◷ <strong id="setup-time">15 s</strong> <span data-i18n="perQuestion">na otázku</span></span>
+        <span aria-hidden="true">✦ <strong id="setup-count">10</strong> <span data-i18n="questions">otázek</span></span>
+      </div>
+      <button class="primary-button" id="start-button" type="button"><span data-i18n="start">Jdeme na to</span><span aria-hidden="true">→</span></button>
+      <p class="hint" id="score-hint">Za správnou odpověď získáš 100 bodů a dalších 100 bodů za odpověď do 3 sekund.</p>
+      <p class="hint" data-i18n="randomHint">Otázky se losují náhodně a v této relaci se neopakují, dokud není sada vyčerpaná.</p>
+    </section>
+
+    <section class="card quiz-card" id="quiz" aria-labelledby="question-title" hidden>
+      <div class="quiz-meta">
+        <span><span data-i18n="questionLabel">OTÁZKA</span> <strong id="question-number">1 / 10</strong></span>
+        <span class="timer" id="timer" role="timer" aria-label="Zbývající čas" data-i18n-aria="remainingTime">◷ <span id="time-left">15</span> <span data-i18n="seconds">s</span></span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Postup kvízem" data-i18n-aria="quizProgress" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <p class="question-kicker" id="question-category">Všeobecný přehled</p>
+      <h2 class="question-title" id="question-title"></h2>
+      <div class="answers" id="answers"></div>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+      <button class="primary-button next-button" id="next-button" type="button" hidden>Další otázka <span aria-hidden="true">→</span></button>
+      <button class="secondary-button quit-button" id="quit-button" type="button" data-i18n="quit">Vzdát kvíz</button>
+    </section>
+
+    <section class="card result-card" id="results" aria-labelledby="result-title" hidden>
+      <div class="result-icon" id="result-icon" aria-hidden="true">🏆</div>
+      <p class="eyebrow" data-i18n="quizCompleted">Kvíz dokončen</p>
+      <h2 id="result-title">Skvělá práce!</h2>
+      <p class="result-copy" id="result-copy"></p>
+      <div class="result-summary" aria-label="Výsledek kvízu">
+        <div class="result-stat"><span class="result-number" id="final-score">0</span><span class="result-label" data-i18n="points">BODŮ</span></div>
+        <div class="result-stat"><span class="result-number" id="correct-count">0/10</span><span class="result-label" data-i18n="correct">SPRÁVNĚ</span></div>
+        <div class="result-stat"><span class="result-number" id="accuracy">0 %</span><span class="result-label" data-i18n="accuracy">ÚSPĚŠNOST</span></div>
+      </div>
+      <div class="result-actions">
+        <button class="primary-button" id="again-button" type="button"><span data-i18n="playAgain">Zahrát znovu</span><span aria-hidden="true">↻</span></button>
+        <button class="secondary-button" id="change-difficulty-button" type="button" data-i18n="changeDifficulty">Změnit obtížnost</button>
+        <button class="secondary-button" id="home-button" type="button" hidden data-i18n="backHome">Zpět na úvod</button>
+      </div>
+    </section>
+  </main>
+  <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
+    <form method="dialog" class="settings-panel">
+      <div class="settings-heading">
+        <div>
+          <p class="eyebrow" data-i18n="preferences">PŘIZPŮSOBENÍ</p>
+          <h2 id="settings-title" data-i18n="settingsTitle">Nastavení</h2>
+        </div>
+        <button class="dialog-close" id="close-settings" type="button" aria-label="Zavřít nastavení" data-i18n-aria="closeSettings">×</button>
+      </div>
+      <label class="setting-row" for="language-setting">
+        <span><strong data-i18n="language">Jazyk rozhraní</strong><small data-i18n="languageHelp">Otázky jsou zatím pouze v češtině.</small></span>
+        <select id="language-setting">
+          <option value="cs">Čeština</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+      <label class="setting-row" for="theme-setting">
+        <span><strong data-i18n="theme">Motiv</strong><small data-i18n="themeHelp">Vyber si vzhled aplikace.</small></span>
+        <select id="theme-setting">
+          <option value="dark" data-i18n="dark">Tmavý</option>
+          <option value="light" data-i18n="light">Světlý</option>
+        </select>
+      </label>
+      <fieldset class="setting-field">
+        <legend data-i18n="accentColor">Barva motivu</legend>
+        <div class="color-options" role="group" aria-label="Barva motivu" data-i18n-aria="accentColor">
+          <button class="color-option" type="button" data-accent="violet" aria-label="Fialová" data-i18n-aria="violet" aria-pressed="true"></button>
+          <button class="color-option" type="button" data-accent="blue" aria-label="Modrá" data-i18n-aria="blue" aria-pressed="false"></button>
+          <button class="color-option" type="button" data-accent="green" aria-label="Zelená" data-i18n-aria="green" aria-pressed="false"></button>
+          <button class="color-option" type="button" data-accent="pink" aria-label="Růžová" data-i18n-aria="pink" aria-pressed="false"></button>
+          <button class="color-option" type="button" data-accent="orange" aria-label="Oranžová" data-i18n-aria="orange" aria-pressed="false"></button>
+        </div>
+      </fieldset>
+      <label class="setting-row" for="question-count-setting">
+        <span><strong data-i18n="questionCount">Počet otázek</strong><small data-i18n="questionCountHelp">Délka jednoho kola.</small></span>
+        <select id="question-count-setting">
+          <option value="5">5</option><option value="10">10</option><option value="15">15</option>
+        </select>
+      </label>
+      <label class="setting-row" for="timer-setting">
+        <span><strong data-i18n="timeLimit">Čas na otázku</strong><small data-i18n="timeLimitHelp">Kolik času máš na odpověď.</small></span>
+        <select id="timer-setting">
+          <option value="10">10 s</option><option value="15">15 s</option><option value="20">20 s</option>
+        </select>
+      </label>
+      <label class="setting-row sound-setting" for="sound-setting">
+        <span><strong data-i18n="soundEffects">Zvukové efekty</strong><small data-i18n="soundHelp">Krátký zvuk po odpovědi.</small></span>
+        <input id="sound-setting" type="checkbox">
+      </label>
+      <div class="settings-actions">
+        <button class="secondary-button" id="reset-settings" type="button" data-i18n="resetSettings">Obnovit výchozí</button>
+        <button class="primary-button" id="done-settings" type="button" data-i18n="done">Hotovo</button>
+      </div>
+    </form>
+  </dialog>
+  <footer data-i18n="footer">Každá otázka je nová šance zazářit ✨</footer>
+   <footer>
+        &copy; 2026 Adam Prokop 1.C
+    </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

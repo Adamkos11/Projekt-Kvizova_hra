@@ -1,0 +1,61 @@
+POSTUP VYTVOŘENÍ KVÍZOVÉ APLIKACE
+=================================
+
+1. ZADÁNÍ A PLÁN
+Nejprve jsem prošel zadání a určil hlavní části aplikace: otázky s odpověďmi,
+výběr obtížnosti, časový limit, bodování a závěrečnou výsledkovou obrazovku.
+Protože jde o jednoduchou hru spouštěnou v prohlížeči, zvolil jsem HTML, CSS
+a JavaScript bez serveru a bez dalších knihoven.
+
+2. STRUKTURA SOUBORŮ
+- index.html obsahuje obsah stránky, tlačítka, herní obrazovky a nastavení.
+- styles.css určuje vzhled, barvy, rozložení a přizpůsobení mobilům.
+- script.js obsahuje otázky, pravidla hry, bodování a reakce na ovládání.
+- Návod k použití.txt a Návod k použití.pdf vysvětlují používání hotové hry.
+
+3. VYTVOŘENÍ ROZHRANÍ
+V HTML jsem připravil úvodní obrazovku, výběr obtížnosti, prostor pro
+otázku a odpovědi, výsledkovou obrazovku a dialog nastavení. Prvky dostaly
+popisky pro přístupnost a ovládání přes klávesnici.
+
+4. VZHLED A PŘIZPŮSOBENÍ
+V CSS jsem vytvořil společný vizuální styl, tlačítka, karty, časovač,
+ukazatel postupu a zvýraznění správné a špatné odpovědi. Rozložení se
+přizpůsobí také menším obrazovkám. Motiv a akcentní barvy se mění pomocí
+CSS proměnných.
+
+5. OTÁZKY A PRAVIDLA
+V JavaScriptu jsou otázky rozdělené podle tří obtížností. Při spuštění se
+otázky náhodně vyberou a zamíchají. Již použité otázky se v aktuální relaci
+neopakují, dokud se nevyčerpá nabídka pro vybranou obtížnost.
+
+Každá otázka má vlastní časový limit. Po výběru odpovědi se ukáže správná
+odpověď a další otázka. Správná odpověď přidá 100 bodů. Dalších 100 bodů
+se přidá za rychlou odpověď do 3 sekund, nebo do 5 sekund u těžké obtížnosti.
+Za chybnou odpověď ani vypršení času se body nepřičítají.
+
+6. VÝSLEDEK A PŘEDČASNÉ UKONČENÍ
+Po poslední otázce se zobrazí získané body, počet správných odpovědí
+a procentuální úspěšnost. Tlačítko „Vzdát kvíz“ ukončí rozehranou hru
+a zobrazí výsledek jen z již zodpovězených otázek.
+
+7. NASTAVENÍ
+Uživatel může změnit jazyk rozhraní, světlý nebo tmavý motiv, barvu motivu,
+počet otázek, délku časového limitu a zvukové efekty. Volby se ukládají
+v úložišti místního prohlížeče (localStorage), takže zůstanou zachované
+i po obnovení stránky. Funkce „Obnovit výchozí“ vrátí původní hodnoty.
+
+Anglická volba překládá rozhraní; samotná banka otázek je v této verzi česká.
+Hra nevyžaduje internet ani server. Výsledky hry se po zavření stránky
+neukládají.
+
+8. KONTROLA FUNKČNOSTI
+Po úpravách jsem zkontroloval syntaxi JavaScriptu a aplikaci spustil
+v prohlížeči. Prošel jsem herní kolo až k výsledku, ověřil různé počty
+otázek a časové limity, bodování, předčasné ukončení a ukládání nastavení.
+Rozhraní jsem také vyzkoušel na úzkém mobilním displeji.
+
+9. SPUŠTĚNÍ
+Otevři soubor index.html v aktuálním prohlížeči. Není nutná instalace
+balíčků. Pokud chceš aplikaci upravit, pracuj zvlášť se soubory HTML,
+CSS a JavaScript.
